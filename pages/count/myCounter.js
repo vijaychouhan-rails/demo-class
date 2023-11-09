@@ -26,7 +26,7 @@ function MyCounter(props) {
       <h1>
         <p>Counter value: {counter}</p>
       </h1>
-      {show && <p>Is Even ? {isEventOrOdd()}</p>}
+      {show && <p>Is Even Number ? {isEventOrOdd()}</p>}
       <p>
         <Button onClick={increaseCountValue}>Click Me +</Button>
       </p>
