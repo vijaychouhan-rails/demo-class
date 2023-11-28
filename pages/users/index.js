@@ -1,133 +1,208 @@
 import React, { useRef, useState } from "react";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
+import {Formik} from 'formik';
+import * as yup from 'yup';
+
 import UserList from "./userList";
 
-const initialFormValues = {};
+const initialFormValues = {name: '', mobileNo: '', address: ''};
 
 function User() {
-  const [formData, setFormData] = useState(initialFormValues);
   const [users, setUsers] = useState([]);
-  const [formErrors, setFormErrors] = useState({});
-
+  const [sumResult, setSumResult] = useState();
   const formRef = useRef();
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const callApi = () => {
+    return new Promise(function(resolve, reject) {
+      setTimeout(() => {
+        resolve({success: true})
+      }, 2000)  
+    })
+    // return myPromise;
+  }
+
+  const handleSubmitForm = (values, actions) => {
+    // const current = formRef.current;
+    // debugger;
+    // console.log("===formRef====", formRef.current);
+    callApi().then((res) => {
+      if (res.success) {
+        setUsers([...users, values]); //Set users
+        actions.resetForm();
+      }
+    })
+
+    // actions.resetForm();
+    // //   formRef.current.reset(); //Reset the form
+
+    // setUsers([...users, values]); //Set users
+    //   // setFormData(initialFormValues);
+    //   setFormData({ ...initialFormValues }); // state reset
+    // }
   };
 
-  const checkFormValidation = () => {
-    const errors = {};
-    if (formData.name == "" || formData.name == null) {
-      errors.name = "Name is required";
-    } else if (formData.name.length <= 2) {
-      errors.name = "Enter at-least 3 or more characters";
-    }
-    return errors;
-  };
+  // const myPromise = new Promise((resolve, reject) => {
+  //   setTimeout(() => {
+  //     const randomNumber = Math.random();
+      
+  //     if (randomNumber > 0.5) {
+  //       resolve('Operation succeeded: ' + randomNumber);
+  //     } else {
+  //       reject('Operation failed: ' + randomNumber);
+  //     }
+  //   }, 1000);
+  // });
+  
+  // // Handling the promise
+  // myPromise.then((result) => {
+  //   console.log(result); // Operation succeeded: [randomNumber]
+  // }).catch((error) => {
+  //   console.error(error); // Operation failed: [randomNumber]
+  // });
+  
+  const validationSchema = yup.object().shape({
+    name: yup.string().required().min(2).max(20),
+  });
 
-  const handleSubmitForm = (e) => {
-    e.preventDefault(); // Stop to reload the page.
+  // const sum = (num1, num2) => {
+  //   let r = null;
 
-    const errors = checkFormValidation();
 
-    setFormErrors(errors);
+  //   let myPromise = new Promise(function(resolve, reject) {
+      
+  //     setTimeout(() => {
+  //       console.log("===5 second is over===");
+  //       r = (num1 + num2)
+        
+  //       if (r < 0) {
+  //         reject("Sum can not be negative");
+  //       }
+  //       resolve(r);
+  //     }, 2000);
 
-    if (Object.keys(errors).length == 0) {
-      formRef.current.reset(); //Reset the form
+  //   });
+    
+    
 
-      setUsers([...users, formData]); //Set users
-      // setFormData(initialFormValues);
-      setFormData({ ...initialFormValues }); // state reset
-    }
-  };
+  //   return myPromise;
+  // }
 
-  console.log(
-    "===formErrors.name===",
-    !!formErrors.name,
-    formErrors.name !== undefined && !!formErrors.name
-  );
+  // const performOperation = () => {
+  //   sum(10, 20).then((res) => {
+  //     console.log("====result=====", res);
+  //     setSumResult(res);
+  //   })
+  // }
+
+  // const performFailOperation = () => {
+  //   sum(10, -20).then((res) => {
+  //     console.log("====result=====", res);
+  //     setSumResult(res);
+  //   }).catch((err) => {
+  //     alert(err);
+  //   })
+  // }
+
   return (
     <Container>
       <Row className="justify-content-md-center mt-5">
         <Col xs lg="6">
-          Address: {formData.address}
+          Name: {formRef.current?.values?.name}
           <UserList users={users} setUsers={setUsers} />
         </Col>
+        {/* <h3>{sumResult}</h3>
+        <button onClick={performOperation}>Sum</button>
+        <button onClick={performFailOperation}>Sum Failed</button> */}
 
         <Col xs lg="6">
           <Card className="">
             <Card.Header>User Detail Form</Card.Header>
             <Card.Body>Form here</Card.Body>
-            <Form className="p-2" onSubmit={handleSubmitForm} ref={formRef}>
-              <Form.Group
-                as={Row}
-                className="mb-3"
-                controlId="formPlaintextEmail"
-              >
-                <Form.Label column sm="4">
-                  Name
-                </Form.Label>
-                <Col sm="8">
-                  <Form.Control
-                    name="name"
-                    placeholder="Enter your name"
-                    onChange={handleChange}
-                    isInvalid={
-                      formErrors.name !== undefined && !!formErrors.name
-                    }
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {formErrors.name}
-                  </Form.Control.Feedback>
-                </Col>
-              </Form.Group>
-              <Form.Group
-                as={Row}
-                className="mb-3"
-                controlId="formPlaintextEmail"
-              >
-                <Form.Label column sm="4">
-                  Mobile Number
-                </Form.Label>
-                <Col sm="8">
-                  <Form.Control
-                    name="mobileNo"
-                    placeholder="Enter your mobile"
-                    onChange={handleChange}
-                    // isInvalid={true}
-                  />
-                  {/* <Form.Control.Feedback type="invalid">
-                    Mobile Number is invalid
-                  </Form.Control.Feedback> */}
-                </Col>
-              </Form.Group>
-              <Form.Group
-                as={Row}
-                className="mb-3"
-                controlId="formPlaintextEmail"
-              >
-                <Form.Label column sm="4">
-                  Address
-                </Form.Label>
-                <Col sm="8">
-                  <Form.Control
-                    name="address"
-                    placeholder="Enter your address"
-                    onChange={handleChange}
-                    // isInvalid={true}
-                  />
-                  {/* <Form.Control.Feedback type="invalid">
-                    Please choose a username.
-                  </Form.Control.Feedback> */}
-                </Col>
-              </Form.Group>
-              <Button variant="primary" type="submit">
-                Save
-              </Button>{" "}
-            </Form>
+            <Formik
+              innerRef={formRef}
+              validationSchema={validationSchema}
+              onSubmit={handleSubmitForm}
+              initialValues={initialFormValues}
+            >
+              {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => {
+                console.log("===isSubmitting===", isSubmitting);
+                return(
+                  <Form className="p-2" onSubmit={handleSubmit}>
+                    <Form.Group
+                      as={Row}
+                      className="mb-3"
+                      controlId="formPlaintextEmail"
+                    >
+                      <Form.Label column sm="4">
+                        Name
+                      </Form.Label>
+                      <Col sm="8">
+                        <Form.Control
+                          name="name"
+                          value={values.name}
+                          placeholder="Enter your name"
+                          onChange={handleChange}
+                          isInvalid={
+                            touched.name && !!errors.name
+                          }
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errors.name}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>
+                    <Form.Group
+                      as={Row}
+                      className="mb-3"
+                      controlId="formPlaintextEmail"
+                    >
+                      <Form.Label column sm="4">
+                        Mobile Number
+                      </Form.Label>
+                      <Col sm="8">
+                        <Form.Control
+                          name="mobileNo"
+                          value={values.mobileNo}
+                          placeholder="Enter mobile number"
+                          onChange={handleChange}
+                          isInvalid={
+                            touched.mobileNo && !!errors.mobileNo
+                          }
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errors.mobileNo}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>
+                    <Form.Group
+                      as={Row}
+                      className="mb-3"
+                      controlId="formPlaintextEmail"
+                    >
+                      <Form.Label column sm="4">
+                        Address
+                      </Form.Label>
+                      <Col sm="8">
+                        <Form.Control
+                          name="address"
+                          value={values.address}
+                          placeholder="Enter Address"
+                          onChange={handleChange}
+                          isInvalid={
+                            touched.address && !!errors.address
+                          }
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errors.address}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>
+                    <Button variant="primary" type="submit" disabled={isSubmitting}>
+                      {isSubmitting ? 'Please wait...' : 'Save'}
+                    </Button>{" "}
+                  </Form>
+              )}}
+            </Formik>
           </Card>
         </Col>
       </Row>
