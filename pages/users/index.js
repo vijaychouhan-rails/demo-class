@@ -11,7 +11,8 @@ function User() {
   const [users, setUsers] = useState([]);
   const [sumResult, setSumResult] = useState();
   const formRef = useRef();
-
+  
+  // API CALLING
   const callApi = () => {
     return new Promise(function(resolve, reject) {
       setTimeout(() => {

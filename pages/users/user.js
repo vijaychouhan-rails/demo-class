@@ -3,7 +3,8 @@ import { Button, Col, Row } from "react-bootstrap";
 
 function User(props) {
   const { name, mobileNo, handleDeleteUser, index } = props;
-
+    
+  // Handle delete request
   const handleDelete = () => {
     let bool = confirm(`Are you sure want to delete user: #${name}`);
     if (bool) {
