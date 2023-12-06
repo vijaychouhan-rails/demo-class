@@ -3,6 +3,7 @@ import React from "react";
 // import Setting from "./setting";
 import User from "./user";
 import { Badge, Button, Card, Col, Row } from "react-bootstrap";
+import Link from "next/link";
 
 //Component
 function Home() {
@@ -16,6 +17,7 @@ function Home() {
           height={200}
         />
         <Card.Body>
+          <Link href="/dec2">Dec2 Page</Link>
           <Card.Title>User Name</Card.Title>
           <Card.Title>1234567890</Card.Title>
           <Card.Title>1234567890</Card.Title>
