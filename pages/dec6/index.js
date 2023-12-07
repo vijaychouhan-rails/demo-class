@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import { Col, Image, Table } from "react-bootstrap";
+import { Col, Image, Pagination, Table } from "react-bootstrap";
+import { times, map } from "lodash";
 
 function Dec6() {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [metaData, setMetaData] = useState({ totalPages: 0, currentPage: 1 });
 
-  const loadData = () => {
+  const loadData = (page) => {
     setIsLoading(true);
-    fetch("https://reqres.in/api/users?page=2&delay=7")
+    fetch(`https://reqres.in/api/users?page=${page}`)
       .then((response) => {
         setIsLoading(false);
         console.log("=====res==", response);
@@ -22,6 +24,10 @@ function Dec6() {
       .then((resData) => {
         console.log("====success=========================", resData);
         setUsers(resData.data); // Assuming the response has a 'data' property containing the user array
+        setMetaData({
+          totalPages: resData.total_pages,
+          currentPage: resData.page,
+        });
       })
       .catch((error) => {
         console.error("Error fetching data:", error.message);
@@ -31,7 +37,10 @@ function Dec6() {
   return (
     <center>
       <Col className="col-md-6 mt-2">
-        <button onClick={loadData} disabled={isLoading}>
+        <button
+          onClick={() => loadData(metaData.currentPage)}
+          disabled={isLoading}
+        >
           {isLoading ? "Loading..." : "Load Data"}
         </button>
 
@@ -61,6 +70,20 @@ function Dec6() {
             })}
           </tbody>
         </Table>
+        <Pagination>
+          {map(times(metaData.totalPages), (pn) => {
+            let page = pn + 1;
+            return (
+              <Pagination.Item
+                onClick={() => loadData(page)}
+                active={page === metaData.currentPage}
+                key={`pn-${pn}`}
+              >
+                {page}
+              </Pagination.Item>
+            );
+          })}
+        </Pagination>
       </Col>
     </center>
   );
