@@ -17,7 +17,7 @@ function Home() {
           height={200}
         />
         <Card.Body>
-          <Link href="/dec2">Dec2 Page</Link>
+          <Link href="/dec11">Dec11 Page</Link>
           <Card.Title>User Name</Card.Title>
           <Card.Title>1234567890</Card.Title>
           <Card.Title>1234567890</Card.Title>

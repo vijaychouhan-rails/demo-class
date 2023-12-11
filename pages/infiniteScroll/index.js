@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { Col, Image, Pagination, Table } from "react-bootstrap";
-import { times, map } from "lodash";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Col, Image, Spinner, Table, Button } from "react-bootstrap";
 
-function Dec6() {
+function InfinteScroll() {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [metaData, setMetaData] = useState({
@@ -39,6 +38,35 @@ function Dec6() {
       });
   };
 
+  const handleScroll = () => {
+    // if (typeof document !== "undefined") {
+    const scrolled = window.innerHeight + document.documentElement.scrollTop;
+    const totalHeight = document.documentElement.offsetHeight;
+    console.log(
+      "===isLoading, metaData.nextPage",
+      isLoading,
+      metaData.nextPage
+    );
+    // Check if the user is near the bottom of the page
+    if (!isLoading && scrolled >= totalHeight - 1) {
+      console.log("End of page reached!");
+      if (metaData.nextPage !== null) {
+        loadData(metaData.nextPage);
+      }
+      // Your logic for reaching the end of the page
+    }
+    // }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isLoading]);
+
+  useEffect(() => {
+    loadData(metaData.nextPage);
+  }, []);
+
   return (
     <center>
       <Col className="col-md-6 mt-2">
@@ -69,32 +97,21 @@ function Dec6() {
           </tbody>
         </Table>
 
-        {metaData.nextPage !== null && (
-          <button
-            onClick={() => loadData(metaData.nextPage)}
-            disabled={isLoading}
-          >
-            {isLoading ? "Loading..." : "Load More Data"}
-          </button>
+        {metaData.nextPage !== null && isLoading && (
+          <Button variant="primary" disabled className="mb-5">
+            <Spinner
+              as="span"
+              animation="grow"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+            />
+            Loading...
+          </Button>
         )}
-
-        {/* <Pagination>
-          {map(times(metaData.totalPages), (pn) => {
-            let page = pn + 1;
-            return (
-              <Pagination.Item
-                onClick={() => loadData(page)}
-                active={page === metaData.currentPage}
-                key={`pn-${pn}`}
-              >
-                {page}
-              </Pagination.Item>
-            );
-          })}
-        </Pagination> */}
       </Col>
     </center>
   );
 }
 
-export default Dec6;
+export default InfinteScroll;
