@@ -7,8 +7,59 @@ import Link from "next/link";
 
 //Component
 function Home() {
+  // const example = async () => {
+  //   return new Promise((resolve, reject) => {
+  //     resolve("1234");
+  //   });
+  // };
+
+  const example = async () => {
+    return 2000;
+  };
+
+  // Regular promise function
+  // const example1 = () => {
+  //   let promise = new Promise((resolve, reject) => {
+  //     setTimeout(() => resolve("s done!"), 1000);
+  //   });
+  //   return promise;
+  // };
+
+  // Convert Regular promise to async function
+  // async before a function means function always returns a promise.
+  // Other values are wrapped in a resolved promise automatically.
+
+  const example1 = async () => {
+    let promise = new Promise((resolve, reject) => {
+      setTimeout(() => resolve("done!"), 1000);
+    });
+    return promise;
+  };
+
+  const example2 = async () => {
+    let promise = new Promise((resolve, reject) => {
+      setTimeout(() => resolve("example 2"), 1000);
+    });
+    console.log("===1====");
+    let op = await promise; // wait until the promise resolves (*)
+    console.log("===2====");
+    return op;
+  };
+
+  const handleClick = () => {
+    example().then((res) => {
+      console.log("====res====", res);
+    });
+  };
+
+  const handleClick1 = async () => {
+    let op = await example2();
+    console.log("======op======", op);
+  };
+
   return (
     <>
+      <Button onClick={handleClick1}>Await Example</Button>
       <Card style={{ width: "18rem" }}>
         <Card.Img
           variant="top"

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import Link from "next/link";
+import OnlineStatus from "./onlineStatus";
 
 function Dec11() {
   // It will run everytime when page re-render
@@ -22,17 +23,17 @@ function Dec11() {
   //     console.log("====no dependency=====");
   //   }, []);
 
-  useEffect(() => {
-    function handleScroll(e) {
-      console.log("=====scrolling====");
-      console.log(window.scrollX, window.scrollY);
-    }
+  //   useEffect(() => {
+  //     function handleScroll(e) {
+  //       console.log("=====scrolling====");
+  //       console.log(window.scrollX, window.scrollY);
+  //     }
 
-    window.addEventListener("scroll", handleScroll);
+  //     window.addEventListener("scroll", handleScroll);
 
-    return () => window.removeEventListener("scroll", handleScroll);
-    // return () => console.log("====unmounting===================");
-  }, []);
+  //     return () => window.removeEventListener("scroll", handleScroll);
+  //     // return () => console.log("====unmounting===================");
+  //   }, []);
 
   //   const handleCount = () => {
   //     let nextCount = count + 1;
@@ -55,7 +56,9 @@ function Dec11() {
         <Button onClick={handleNumber}>Number</Button>
       </p> */}
       <Link href="/home">Home Page</Link>
+      <OnlineStatus />
 
+      {/* <p>test</p>
       <p>test</p>
       <p>test</p>
       <p>test</p>
@@ -118,8 +121,7 @@ function Dec11() {
       <p>test</p>
       <p>test</p>
       <p>test</p>
-      <p>test</p>
-      <p>test</p>
+      <p>test</p> */}
     </div>
   );
 }

@@ -12,31 +12,67 @@ function Dec6() {
     nextPage: 1,
   });
 
-  const loadData = (page) => {
-    setIsLoading(true);
-    // Make a request for a user with a given ID
-    axios
-      .get(`https://reqres.in/api/users?page=${page}`)
-      .then(function (response) {
-        // handle success
-        const { data, total_pages: totalPages, page } = response.data;
+  // It's a way to declare a function in JavaScript
+  // that handles asynchronous operations
+  // When a function is declared with the async keyword,
+  // it means it can contain asynchronous code and will always return a promise.
 
-        setUsers([...users, ...response.data.data]);
+  // const loadData = (page) => {
+  //   setIsLoading(true);
+  //   // Make a request for a user with a given ID
+  //   axios
+  //     .get(`https://reqres.in/api/users?page=${page}`)
+  //     .then(function (response) {
+  //       // handle success
+  //       const { data, total_pages: totalPages, page } = response.data;
 
-        setMetaData({
-          totalPages: totalPages,
-          currentPage: page,
-          nextPage: page === totalPages ? null : page + 1,
-        });
-      })
-      .catch(function (error) {
-        // handle error
-        alert(error.message);
-        // console.log("=====error=====", error);
-      })
-      .finally(function () {
-        setIsLoading(false);
+  //       setUsers([...users, ...response.data.data]);
+
+  //       setMetaData({
+  //         totalPages: totalPages,
+  //         currentPage: page,
+  //         nextPage: page === totalPages ? null : page + 1,
+  //       });
+  //     })
+  //     .catch(function (error) {
+  //       // handle error
+  //       alert(error.message);
+  //       // console.log("=====error=====", error);
+  //     })
+  //     .finally(function () {
+  //       setIsLoading(false);
+  //     });
+  // };
+
+  const loadData = async (page) => {
+    try {
+      setIsLoading(true);
+      // Make a request for a user with a given ID
+      const response = await axios.get(
+        `https://reqres.in/api/users?page=${page}`
+      );
+
+      // handle success
+      const {
+        data,
+        total_pages: totalPages,
+        page: currentPage,
+      } = response.data;
+
+      setUsers([...users, ...response.data.data]);
+
+      setMetaData({
+        totalPages: totalPages,
+        currentPage: currentPage,
+        nextPage: currentPage === totalPages ? null : currentPage + 1,
       });
+    } catch (error) {
+      // handle error
+      alert(error.message);
+      // console.log("=====error=====", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
