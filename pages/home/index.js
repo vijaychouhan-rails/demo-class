@@ -4,6 +4,8 @@ import React from "react";
 import User from "./user";
 import { Badge, Button, Card, Col, Row } from "react-bootstrap";
 import Link from "next/link";
+import { resolve } from "styled-jsx/css";
+import { reject } from "lodash";
 
 //Component
 function Home() {
@@ -13,14 +15,20 @@ function Home() {
   //   });
   // };
 
-  const example = async () => {
-    return 2000;
-  };
+  // const example = async () => {
+  //   return 2000;
+  // };
+
+  // const example = () => {
+  //   return new Promise((resolve, reject) => {
+  //     resolve(22222);
+  //   });
+  // };
 
   // Regular promise function
   // const example1 = () => {
   //   let promise = new Promise((resolve, reject) => {
-  //     setTimeout(() => resolve("s done!"), 1000);
+  //     setTimeout(() => resolve("done!"), 3000);
   //   });
   //   return promise;
   // };
@@ -31,14 +39,14 @@ function Home() {
 
   const example1 = async () => {
     let promise = new Promise((resolve, reject) => {
-      setTimeout(() => resolve("done!"), 1000);
+      setTimeout(() => resolve("done!"), 3000);
     });
     return promise;
   };
 
   const example2 = async () => {
     let promise = new Promise((resolve, reject) => {
-      setTimeout(() => resolve("example 2"), 1000);
+      setTimeout(() => resolve("example 2"), 2000);
     });
     console.log("===1====");
     let op = await promise; // wait until the promise resolves (*)
@@ -46,20 +54,65 @@ function Home() {
     return op;
   };
 
-  const handleClick = () => {
-    example().then((res) => {
-      console.log("====res====", res);
+  const example3 = () => {
+    let promise = new Promise((resolve, reject) => {
+      setTimeout(() => resolve("example 3"), 2000);
     });
+    return promise;
   };
 
-  const handleClick1 = async () => {
-    let op = await example2();
-    console.log("======op======", op);
+  const example4 = () => {
+    let promise = new Promise((resolve, reject) => {
+      setTimeout(() => reject("example 4"), 2000);
+    });
+    return promise;
   };
+
+  const example5 = () => {
+    let promise = new Promise((resolve, reject) => {
+      setTimeout(() => resolve("example 5"), 2000);
+    });
+    return promise;
+  };
+
+  const handleClick = async () => {
+    try {
+      let res1 = await example3();
+      console.log(res1);
+      let res2 = await example4();
+      let res3 = await example5();
+      console.log(res3);
+    } catch (e) {
+      console.log("error is==", e);
+    }
+  };
+
+  // const handleClick = () => {
+  //   example3().then((res) => {
+  //     console.log(res);
+  //     example4().then((res1) => {
+  //       console.log(res1);
+  //       example5().then((res2) => {
+  //         console.log(res2);
+  //       });
+  //     });
+  //   });
+  //   // example2().then((res) => {
+  //   //   console.log("====res====", res);
+  //   // });
+
+  //   // const res = await example2();
+  //   // console.log("====res====", res);
+  // };
+
+  // const handleClick1 = async () => {
+  //   let op = await example2();
+  //   console.log("======op======", op);
+  // };
 
   return (
     <>
-      <Button onClick={handleClick1}>Await Example</Button>
+      <Button onClick={handleClick}>Example1</Button>
       <Card style={{ width: "18rem" }}>
         <Card.Img
           variant="top"
